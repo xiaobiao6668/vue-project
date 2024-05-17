@@ -1,0 +1,42 @@
+//主题颜色重置
+$--colors: (
+  "primary": (
+    "base": #0268B7,
+  ),
+  "success": (
+    "base": #029e52,
+  ),
+  "warning": (
+    "base": #f2711c,
+  ),
+  "danger": (
+    "base": #d43d3d,
+  ),
+  "error": (
+    "base": #d43d3d,
+  ),
+  "info": (
+    "base": #666,
+  ),
+);
+
+// You should use them in scss, because we calculate it by sass.
+// comment next lines to use default color
+//重写源码里面某些变量
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  // do not use same name, it will override.
+  $colors: $--colors,
+  $button-padding-horizontal: ("default": 20px)
+);
+
+// custom dark variables
+//自定义暗黑主题
+@use "./dark.scss" as *;
+
+// if you want to import all
+//全部导入
+@use "element-plus/theme-chalk/src/index.scss" as *;
+
+// You can comment it to hide debug info.
+//隐藏调试信息
+// @debug $--colors;
