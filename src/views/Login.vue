@@ -1,11 +1,11 @@
 <template>
-    <div style="height: 100%" class="login">
+    <el-container style="height: 100%" class="login">
         <el-header class="header">
             <div class="logo">
                 <span>细胞图像分割系统</span>
             </div>
         </el-header>
-        <div class="content">
+        <el-main class="content">
             <div class="form">
                 <el-form
                     label-position="top"
@@ -13,10 +13,13 @@
                     :model="userInfo"
                     style="max-width: 500px; margin: auto"
                 >
-                    <el-form-item label="账号">
-                        <el-input v-model="userInfo.account" />
+                    <el-form-item label="账号" v-if="loginType === 'account'">
+                        <el-input v-model="userInfo.account" maxlength="20" />
                     </el-form-item>
-                    <el-form-item label="密码">
+                    <el-form-item label="邮箱" v-else>
+                        <el-input v-model="userInfo.email" maxlength="20"/>
+                    </el-form-item>
+                    <el-form-item label="密码" maxlength="20">
                         <el-input v-model="userInfo.pwd" type="password" show-password />
                     </el-form-item>
                     <el-form-item></el-form-item>
@@ -33,8 +36,8 @@
                     </div>
                 </el-form>
             </div>
-        </div>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script setup lang="ts">
@@ -44,8 +47,10 @@ import { ElMessage } from 'element-plus'
 import Api from '@/api/login'
 const router = useRouter()
 const remember = ref(false)
+const loginType = ref('account')
 const userInfo = reactive({
     account: '',
+    email: '',
     pwd: ''
 })
 function register() {
@@ -69,12 +74,11 @@ function loginHandler() {
             if (res.data.role) {
                 sessionStorage.setItem('role', 'admin')
                 router.push('/comments')
-            }else{
+            } else {
                 sessionStorage.setItem('role', 'user')
                 router.push('/cellSplit')
             }
         }
-    
     })
 }
 function checkInput(userInfo: { account: string; pwd: string }) {
@@ -154,7 +158,7 @@ onMounted(() => {
     width: 600px;
     // height: 600px;
     border-radius: 14px;
-    margin: 300px auto auto auto;
+    margin: auto;
     padding: 100px 80px;
     background-color: rgba(76, 178, 117, 0.65);
 }

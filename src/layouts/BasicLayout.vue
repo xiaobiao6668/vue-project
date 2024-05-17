@@ -12,8 +12,8 @@
                 </el-space>
             </div>
         </el-header>
-        <div class="content">
-            <div class="demo-tabs">
+        <el-main class="content">
+            <el-aside class="demo-tabs">
                 <div v-for="(item, index) in tabs" :key="item">
                     <el-button
                         :class="['tabs', item === activeTab ? 'active' : 'disactive']"
@@ -21,7 +21,7 @@
                         >{{ item }}</el-button
                     >
                 </div>
-            </div>
+            </el-aside>
             <el-container class="worpBox">
                 <el-main style="background-color: rgba(225, 225, 225, 0); --el-main-padding: 4px">
                     <div
@@ -43,7 +43,7 @@
                     </div>
                 </el-main>
             </el-container>
-        </div>
+        </el-main>
     </el-container>
 </template>
 

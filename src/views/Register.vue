@@ -1,11 +1,11 @@
 <template>
-    <div style="height: 100%" class="login">
+    <el-container style="height: 100%" class="login">
         <el-header class="header">
             <div class="logo">
                 <span>细胞图像分割系统</span>
             </div>
         </el-header>
-        <div class="content">
+        <el-main class="content">
             <div class="form">
                 <el-form
                     label-position="top"
@@ -14,13 +14,23 @@
                     style="max-width: 500px; margin: auto"
                 >
                     <el-form-item label="账号">
-                        <el-input v-model="userInfo.account" />
+                        <el-input v-model="userInfo.account" maxLength="20" />
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="userInfo.pwd" type="password" show-password />
+                        <el-input
+                            v-model="userInfo.pwd"
+                            type="password"
+                            show-password
+                            maxlength="20"
+                        />
                     </el-form-item>
                     <el-form-item label="确认密码">
-                        <el-input v-model="userInfo.confirmPwd" type="password" show-password />
+                        <el-input
+                            v-model="userInfo.confirmPwd"
+                            type="password"
+                            show-password
+                            maxlength="20"
+                        />
                     </el-form-item>
                     <el-form-item></el-form-item>
                     <div style="display: flex; justify-content: space-around">
@@ -33,16 +43,17 @@
                     </div>
                 </el-form>
             </div>
-        </div>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import Api from '@/api/login'
 const router = useRouter()
+const loginType = ref('account')
 const userInfo = reactive({
     account: '',
     pwd: '',
@@ -52,7 +63,7 @@ function backLogin() {
     router.go(-1)
 }
 function registerHandler() {
-    if(checkInput(userInfo)){
+    if (checkInput(userInfo)) {
         const params = {
             userName: userInfo.account,
             passwordHash: userInfo.pwd
@@ -64,7 +75,7 @@ function registerHandler() {
     }
 }
 function checkInput(userInfo: { account: string; pwd: string; confirmPwd: string }) {
-    if (!userInfo.account) {
+    if (!userInfo.account && loginType.value == 'account') {
         ElMessage.error('请输入账号')
         return false
     }
@@ -78,9 +89,7 @@ function checkInput(userInfo: { account: string; pwd: string; confirmPwd: string
     }
     return true
 }
-onMounted(() => {
-    
-})
+onMounted(() => {})
 </script>
 
 <style lang="scss">
@@ -139,7 +148,7 @@ onMounted(() => {
     width: 600px;
     // height: 600px;
     border-radius: 14px;
-    margin: 300px auto auto auto;
+    margin: auto;
     padding: 100px 80px;
     background-color: rgba(76, 178, 117, 0.65);
 }
