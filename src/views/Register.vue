@@ -16,6 +16,9 @@
                     <el-form-item label="账号">
                         <el-input v-model="userInfo.account" maxLength="20" />
                     </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="userInfo.email" maxLength="20" />
+                    </el-form-item>
                     <el-form-item label="密码">
                         <el-input
                             v-model="userInfo.pwd"
@@ -48,14 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import Api from '@/api/login'
 const router = useRouter()
-const loginType = ref('account')
 const userInfo = reactive({
     account: '',
+    email:'',
     pwd: '',
     confirmPwd: ''
 })
@@ -66,6 +69,7 @@ function registerHandler() {
     if (checkInput(userInfo)) {
         const params = {
             userName: userInfo.account,
+            email:userInfo.email,
             passwordHash: userInfo.pwd
         }
         Api.register(params).then(() => {
@@ -74,10 +78,21 @@ function registerHandler() {
         })
     }
 }
-function checkInput(userInfo: { account: string; pwd: string; confirmPwd: string }) {
-    if (!userInfo.account && loginType.value == 'account') {
+function checkInput(userInfo: { account: string;email:string; pwd: string; confirmPwd: string }) {
+    if (!userInfo.account) {
         ElMessage.error('请输入账号')
         return false
+    }
+    if (!userInfo.email) {
+        ElMessage.error('请输入邮箱')
+        return false
+    }
+    if(userInfo.email){
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!reg.test(userInfo.email)){
+            ElMessage.error('邮箱格式不正确')
+            return false
+        }
     }
     if (!userInfo.pwd) {
         ElMessage.error('请输入密码')

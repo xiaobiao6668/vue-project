@@ -8,24 +8,17 @@
                 name="multipartFile"
                 :data="{ userId: userId, type: '2' }"
                 :on-success="handleSuccess"
+                :before-upload="beforeUpload"
             >
                 <template #trigger>
                     <div class="el-text">点击上传原图</div>
                 </template>
             </el-upload>
-            <el-image
-                v-show="showPreImg"
-                :src="preImg"
-                style="width: 100%; height: 90%; object-fit: fill"
-            />
+            <el-image v-show="showPreImg" :src="preImg" />
         </div>
         <div class="right">
             <div class="el-text-right">处理后的图</div>
-            <el-image
-                v-show="showImg"
-                :src="imgData"
-                style="width: 100%; height: 90%; object-fit: fill"
-            />
+            <el-image v-show="showImg" :src="imgData" />
         </div>
     </div>
 </template>
@@ -38,10 +31,24 @@ const preImg = ref('')
 const imgData = ref('')
 const userId = sessionStorage.getItem('id')
 function handleSuccess(res) {
-    showPreImg.value = true
+    // showPreImg.value = true
     showImg.value = true
-    preImg.value = 'data:image/png;base64,' + res.data[0].content
+    // preImg.value = 'data:image/png;base64,' + res.data[0].content
     imgData.value = 'data:image/png;base64,' + res.data[1].content
+}
+function beforeUpload(file) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        // 获取文件的二进制流
+        const binaryData = e.target.result
+        // 将二进制流转换为Base64编码
+        const base64Data = btoa(binaryData)
+        // 设置预览图片的Base64编码
+        showPreImg.value = true
+        preImg.value = `data:${file.type};base64,${base64Data}`
+    }
+    reader.readAsBinaryString(file) // 以二进制字符串形式读取文件
+    return false
 }
 onMounted(() => {})
 </script>
@@ -71,7 +78,9 @@ onMounted(() => {})
 }
 .el-text-right {
     width: 100%;
-    height: 5%;
+    // height: 5%;
+    line-height: 56px;
+    font-size: 16px;
     background: rgba($color: #aad8ac, $alpha: 1);
     border-bottom: 1px dashed #666;
     display: flex;

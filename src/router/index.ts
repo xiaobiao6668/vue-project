@@ -43,6 +43,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/profile',
+                    name: 'profile',
+                    component: () => import('../views/Index/profile.vue'),
+                    meta: {
+                        title: '个人中心'
+                    }
+                },
+                {
                     path: '/users',
                     name: 'users',
                     component: () => import('../views/Index/users.vue'),

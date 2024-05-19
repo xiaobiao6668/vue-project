@@ -7,7 +7,7 @@
             <div class="header-right">
                 <el-space :size="14">
                     <el-button style="margin-right: 20px" link @click="logout">
-                        <el-icon :size="20">退出登录</el-icon>
+                        <el-icon :size="20" color="#fff">退出登录</el-icon>
                     </el-button>
                 </el-space>
             </div>
@@ -51,8 +51,8 @@
 import { ref, onMounted } from 'vue'
 import router from '@/router'
 
-const tabs = ref(['细胞分割', '细胞检测', '反馈', '历史记录', '用户信息'])
-const paths = ref(['cellSplit', 'cellTest', 'comments', 'history', 'users'])
+const tabs = ref(['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心','用户信息'])
+const paths = ref(['cellSplit', 'cellTest', 'comments', 'history', 'profile','users'])
 const activeTab = ref('')
 function logout() {
     router.push('/login')
@@ -67,8 +67,8 @@ onMounted(() => {
         tabs.value = ['反馈', '用户信息']
         paths.value = ['comments', 'users']
     } else {
-        tabs.value = ['细胞分割', '细胞检测', '反馈', '历史记录']
-        paths.value = ['cellSplit', 'cellTest', 'comments', 'history']
+        tabs.value = ['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心']
+        paths.value = ['cellSplit', 'cellTest', 'comments', 'history','profile']
     }
 })
 </script>

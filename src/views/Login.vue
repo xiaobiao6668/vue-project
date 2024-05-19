@@ -17,12 +17,17 @@
                         <el-input v-model="userInfo.account" maxlength="20" />
                     </el-form-item>
                     <el-form-item label="邮箱" v-else>
-                        <el-input v-model="userInfo.email" maxlength="20"/>
+                        <el-input v-model="userInfo.email" maxlength="20" />
                     </el-form-item>
                     <el-form-item label="密码" maxlength="20">
                         <el-input v-model="userInfo.pwd" type="password" show-password />
                     </el-form-item>
-                    <el-form-item></el-form-item>
+                    <el-form-item v-if="loginType === 'account'">
+                        <el-link type="primary" @click="emailLogin">使用邮箱登录</el-link>
+                    </el-form-item>
+                    <el-form-item v-else>
+                        <el-link type="primary" @click="accountLogin">使用账号登录</el-link>
+                    </el-form-item>
                     <div style="display: flex; justify-content: space-between">
                         <div><el-checkbox v-model="remember">记住账号</el-checkbox></div>
                         <div>
@@ -41,34 +46,46 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import Api from '@/api/login'
 const router = useRouter()
 const remember = ref(false)
 const loginType = ref('account')
-const userInfo = reactive({
+const userInfo = ref({
     account: '',
     email: '',
     pwd: ''
 })
+const userInfoStorage = ref()
 function register() {
     router.push('/register')
 }
+function emailLogin() {
+    userInfo.value = userInfoStorage.value
+        ? userInfoStorage.value
+        : { account: '', email: '', pwd: '' }
+    loginType.value = 'email'
+}
+function accountLogin() {
+    userInfo.value = userInfoStorage.value
+        ? userInfoStorage.value
+        : { account: '', email: '', pwd: '' }
+    loginType.value = 'account'
+}
 function loginHandler() {
-    checkInput(userInfo)
-    if (remember.value) {
-        localStorage.setItem('account', userInfo.account)
-        localStorage.setItem('pwd', userInfo.pwd)
-    }
+    checkInput(userInfo.value)
     const params = {
-        userName: userInfo.account,
-        password: userInfo.pwd
+        userName: userInfo.value.account,
+        password: userInfo.value.pwd
     }
     Api.login(params).then((res) => {
         ElMessage.success('登陆成功')
         if (res.data && res.data.id) {
+            if (remember.value) {
+                localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
+            }
             sessionStorage.setItem('id', res.data.id)
             sessionStorage.setItem('userName', res.data.userName)
             if (res.data.role) {
@@ -81,9 +98,13 @@ function loginHandler() {
         }
     })
 }
-function checkInput(userInfo: { account: string; pwd: string }) {
-    if (!userInfo.account) {
+function checkInput(userInfo: { account: string; email: string; pwd: string }) {
+    if (!userInfo.account && loginType.value == 'account') {
         ElMessage.error('请输入账号')
+        return false
+    }
+    if (!userInfo.email && loginType.value == 'email') {
+        ElMessage.error('请输入邮箱')
         return false
     }
     if (!userInfo.pwd) {
@@ -93,12 +114,9 @@ function checkInput(userInfo: { account: string; pwd: string }) {
     return true
 }
 onMounted(() => {
-    const account = localStorage.getItem('account')
-    const pwd = localStorage.getItem('pwd')
-    if (account && pwd) {
-        userInfo.account = account
-        userInfo.pwd = pwd
-    }
+    userInfoStorage.value = localStorage.getItem('userInfo')&&JSON.parse(localStorage.getItem('userInfo'))
+        ? JSON.parse(localStorage.getItem('userInfo'))
+        : null
 })
 </script>
 
