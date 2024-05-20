@@ -11,7 +11,7 @@
                 <template #default="scope">
                     <el-image
                         style="width: 320px; height: 180px"
-                        :src="scope.row.base64_beforeUrl"
+                        :src="scope.row.beforeUrl"
                         fit="fit"
                         :preview-src-list="[scope.row.beforeUrl]"
                         :preview-z-index="10"
