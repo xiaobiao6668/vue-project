@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import qs from 'qs'
-// import router from '../router/index'
+import router from '../router/index'
 import { useUserLoginStore } from '@/stores/userLogin'
 const request = axios.create({
     //基地址
@@ -51,14 +51,6 @@ request.interceptors.response.use(
         }
         //  else {
         //     //未登录跳转
-        //     if (!res.data.logined && router.currentRoute.value.path !== '/login') {
-        //         const { clear } = useUserLoginStore()
-        //         clear()
-        //         sessionStorage.clear()
-        //         localStorage.clear()
-        //         router.replace({ path: '/login' })
-        //         // window.location.replace(res.data.data);
-        //     }
         else {
             //全局错误提示
             showMessage(res.data.msgType, {
@@ -67,9 +59,11 @@ request.interceptors.response.use(
                 message: res.data.data || res.data.message
             })
         }
-
-        //     return Promise.reject(res)
-        // }
+        if (res.statusCode === 103 && router.currentRoute.value.path !== '/login') {
+            sessionStorage.clear()
+            localStorage.clear()
+            router.replace({ path: '/login' })
+        }
     },
     (error) => {
         if (error?.response?.data?.message) {
