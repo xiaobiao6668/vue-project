@@ -55,8 +55,8 @@ function handleClick(pane, index) {
 onMounted(() => {
     activeTab.value = tabs.value[paths.value.indexOf(window.location.pathname.substring(1))]
     if (sessionStorage.getItem('role') === 'admin') {
-        tabs.value = ['反馈', '用户信息']
-        paths.value = ['comments', 'users']
+        tabs.value = ['反馈', '用户信息', '历史记录']
+        paths.value = ['comments', 'users', 'history']
     } else {
         tabs.value = ['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心']
         paths.value = ['cellSplit', 'cellTest', 'comments', 'history', 'profile']
