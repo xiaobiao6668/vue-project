@@ -24,16 +24,7 @@
             </el-aside>
             <el-container class="worpBox">
                 <el-main style="background-color: rgba(225, 225, 225, 0); --el-main-padding: 4px">
-                    <div
-                        style="
-                            background: #fff;
-                            width: 96%;
-                            height: 90%;
-                            padding: 14px;
-                            margin: 15px auto;
-                            border-radius: 10px;
-                        "
-                    >
+                    <div class="mainPage">
                         <router-view v-slot="{ Component }">
                             <keep-alive>
                                 <component :is="Component" v-if="$route.meta.keepAlive" />
@@ -51,8 +42,8 @@
 import { ref, onMounted } from 'vue'
 import router from '@/router'
 
-const tabs = ref(['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心','用户信息'])
-const paths = ref(['cellSplit', 'cellTest', 'comments', 'history', 'profile','users'])
+const tabs = ref(['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心', '用户信息'])
+const paths = ref(['cellSplit', 'cellTest', 'comments', 'history', 'profile', 'users'])
 const activeTab = ref('')
 function logout() {
     router.push('/login')
@@ -68,7 +59,7 @@ onMounted(() => {
         paths.value = ['comments', 'users']
     } else {
         tabs.value = ['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心']
-        paths.value = ['cellSplit', 'cellTest', 'comments', 'history','profile']
+        paths.value = ['cellSplit', 'cellTest', 'comments', 'history', 'profile']
     }
 })
 </script>
@@ -146,5 +137,13 @@ onMounted(() => {
     line-height: 20px;
     color: var(--el-text-color-secondary);
     font-size: var(--el-font-size-extra-small);
+}
+.mainPage {
+    background: #fff;
+    width: 96%;
+    height: 90%;
+    padding: 14px;
+    margin: 15px auto;
+    border-radius: 10px;
 }
 </style>
