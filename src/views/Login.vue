@@ -2,7 +2,7 @@
     <el-container style="height: 100%" class="login">
         <el-header class="header">
             <div class="logo">
-                <span>细胞图像分割系统</span>
+                <span>细胞图像处理系统</span>
             </div>
         </el-header>
         <el-main class="loginContent">

@@ -2,7 +2,7 @@
     <el-container style="height: 100%" class="login">
         <el-header class="header">
             <div class="logo">
-                <span>细胞图像分割系统</span>
+                <span>细胞图像处理系统</span>
             </div>
         </el-header>
         <el-main class="content">
@@ -58,7 +58,7 @@ import Api from '@/api/login'
 const router = useRouter()
 const userInfo = reactive({
     account: '',
-    email:'',
+    email: '',
     pwd: '',
     confirmPwd: ''
 })
@@ -69,7 +69,7 @@ function registerHandler() {
     if (checkInput(userInfo)) {
         const params = {
             userName: userInfo.account,
-            email:userInfo.email,
+            email: userInfo.email,
             passwordHash: userInfo.pwd
         }
         Api.register(params).then(() => {
@@ -78,7 +78,7 @@ function registerHandler() {
         })
     }
 }
-function checkInput(userInfo: { account: string;email:string; pwd: string; confirmPwd: string }) {
+function checkInput(userInfo: { account: string; email: string; pwd: string; confirmPwd: string }) {
     if (!userInfo.account) {
         ElMessage.error('请输入账号')
         return false
@@ -87,9 +87,9 @@ function checkInput(userInfo: { account: string;email:string; pwd: string; confi
         ElMessage.error('请输入邮箱')
         return false
     }
-    if(userInfo.email){
-        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!reg.test(userInfo.email)){
+    if (userInfo.email) {
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!reg.test(userInfo.email)) {
             ElMessage.error('邮箱格式不正确')
             return false
         }
