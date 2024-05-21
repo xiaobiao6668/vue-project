@@ -12,7 +12,7 @@
                 </el-space>
             </div>
         </el-header>
-        <el-main class="content">
+        <el-main class="mainContent">
             <el-aside class="demo-tabs">
                 <div v-for="(item, index) in tabs" :key="item">
                     <el-button
@@ -73,7 +73,7 @@ onMounted(() => {
     background: url('@/assets/bg.png') no-repeat;
     background-size: 100% 100%;
 }
-.content {
+.mainContent {
     display: flex;
     flex-direction: row;
     height: 100%;
