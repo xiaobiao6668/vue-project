@@ -5,7 +5,7 @@
                 <span>细胞图像分割系统</span>
             </div>
         </el-header>
-        <el-main class="content">
+        <el-main class="loginContent">
             <div class="form">
                 <el-form
                     label-position="top"
@@ -171,7 +171,7 @@ onMounted(() => {
         }
     }
 }
-.content {
+.loginContent {
     width: 100%;
     display: flex;
 }
