@@ -12,6 +12,7 @@
             v-loading="loading"
         >
             <el-table-column prop="date" label="日期"></el-table-column>
+            <el-table-column prop="creator" label="上传用户"></el-table-column>
             <el-table-column label="原图">
                 <template #default="scope">
                     <el-image
