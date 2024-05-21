@@ -6,5 +6,11 @@ export default {
     },
     delete(id: number) {
         return API.DELETE(`/user/${id}`)
+    },
+    getUserInfo() {
+        return API.GET(`/user`)
+    },
+    changeUserInfo(params: {} | undefined) {
+        return API.PUT_JSON(`/user`, params)
     }
 }

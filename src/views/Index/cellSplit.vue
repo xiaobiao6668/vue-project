@@ -42,7 +42,6 @@ async function handleSuccess(res) {
     const imgId = res.data
     const blob = await Api.getImgPath(imgId)
     imgData.value = window.URL.createObjectURL(blob)
-    console.log(imgData.value)
 }
 function beforeUpload(file) {
     loading.value = true

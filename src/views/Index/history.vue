@@ -103,13 +103,12 @@ const loadMore = throttle(async () => {
             })
         )
         tableData.value = tableData.value.concat(newData)
-        loading.value = false
         history.value.scrollTop =
             history.value.scrollHeight * (pageIndex.value / (pageIndex.value + 1))
+        loading.value = false
     }
-}, 2000)
+}, 1000)
 function addNote(row) {
-    console.log(row)
     drawerInfo.value = row
     drawer.value = true
 }

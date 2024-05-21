@@ -1,45 +1,72 @@
 <template>
     <div>
-        <el-card>
-            <el-form :model="form" :rules="rules" ref="form" label-width="120px">
-                <el-form-item label="用户名" prop="username">
-                    <el-input v-model="form.username"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="form.email"></el-input>
-                </el-form-item>
-                <el-form-item label="新密码" prop="password">
-                    <el-input type="password" v-model="form.password"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="handleSubmit">保存</el-button>
-                    <el-button @click="handleReset">重置</el-button>
-                </el-form-item>
-            </el-form>
-        </el-card>
+        <el-container>
+            <el-main class="content">
+                <el-form :rules="rules" ref="form" :model="formInfo" label-width="120px">
+                    <el-form-item label="用户名" prop="userName">
+                        <el-input v-model="formInfo.userName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                        <el-input v-model="formInfo.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="passwordHash">
+                        <el-input type="password" v-model="formInfo.passwordHash"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="handleSubmit">保存</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-main>
+        </el-container>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-// import Api from '@/api/user'
-// import { ElMessage } from 'element-plus'
-const form = ref({
-    username: '',
+import Api from '@/api/user'
+import { ElMessage } from 'element-plus'
+const formInfo = ref({
+    userName: '',
     email: '',
-    password: ''
+    passwordHash: ''
 })
+const form = ref()
 const rules = {
-    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
     email: [
         { required: true, message: '请输入邮箱', trigger: 'blur' },
         { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
     ],
-    password: [
+    passwordHash: [
         { required: true, message: '请输入新密码', trigger: 'blur' },
         { min: 6, max: 20, message: '密码长度在6到20位之间', trigger: 'blur' }
     ]
 }
-onMounted(() => {})
+function getUserInfo() {
+    Api.getUserInfo().then((res) => {
+        formInfo.value = {
+            userName: res.data.userName,
+            email: res.data.email,
+            id: res.data.id,
+            passwordHash: ''
+        }
+    })
+}
+function handleSubmit() {
+    form.value.validate((valid) => {
+        if (!valid) return
+        Api.changeUserInfo(formInfo.value).then(() => {
+            ElMessage.success('修改成功')
+            getUserInfo()
+        })
+    })
+}
+onMounted(() => {
+    getUserInfo()
+})
 </script>
-<style scoped lang="scss" type="text/scss"></style>
+<style scoped lang="scss" type="text/scss">
+.content {
+    padding: 20px 70px;
+}
+</style>

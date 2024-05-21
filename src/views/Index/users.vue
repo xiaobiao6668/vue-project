@@ -2,6 +2,7 @@
     <div>
         <el-table :data="tableData">
             <el-table-column prop="userName" label="用户名"></el-table-column>
+            <el-table-column prop="email" label="邮箱"></el-table-column>
             <el-table-column prop="createdTime" label="创建时间"></el-table-column>
             <el-table-column label="操作">
                 <template #default="scope">
@@ -29,16 +30,16 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(tableData.value.length)
 
-function handleDelete(row) {
+function handleDelete(row: { id: number }) {
     Api.delete(row.id).then((res) => {
-        if (res.code == 200) {
+        if (res.success) {
             ElMessage.success('删除成功')
         }
         getUser()
     })
 }
 
-function handleCurrentChange(page) {
+function handleCurrentChange(page: number) {
     currentPage.value = page
     getUser()
 }
