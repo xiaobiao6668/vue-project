@@ -78,8 +78,8 @@ async function getHistory() {
             let preData = allData.value.slice(0, 10)
             await Promise.all(
                 preData.map(async (item) => {
-                    const beforeData = await api.getImgPath(item.fileId_before)
-                    const afterData = await api.getImgPath(item.fileId_after)
+                    const beforeData = await api.getImgPath(item.imageIdBefore)
+                    const afterData = await api.getImgPath(item.imageIdAfter)
                     item.beforeUrl = URL.createObjectURL(beforeData)
                     item.afterUrl = URL.createObjectURL(afterData)
                 })
@@ -97,8 +97,8 @@ const loadMore = throttle(async () => {
         let newData = allData.value.slice((pageIndex.value - 1) * 10, pageIndex.value * 10)
         await Promise.all(
             newData.map(async (item) => {
-                const beforeData = await api.getImgPath(item.fileId_before)
-                const afterData = await api.getImgPath(item.fileId_after)
+                const beforeData = await api.getImgPath(item.imageIdBefore)
+                const afterData = await api.getImgPath(item.imageIdAfter)
                 item.beforeUrl = URL.createObjectURL(beforeData)
                 item.afterUrl = URL.createObjectURL(afterData)
             })
