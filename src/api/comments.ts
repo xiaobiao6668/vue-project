@@ -2,12 +2,12 @@ import * as API from './index'
 
 export default {
     getData() {
-        return API.GET('/image')
+        return API.GET('/message')
     },
     del(id: any) {
-        return API.DELETE(`/image/${id}`)
+        return API.DELETE(`/message/${id}`)
     },
     add(data: any) {
-        return API.POST_JSON('/image', data)
+        return API.POST_JSON('/message', data)
     }
 }

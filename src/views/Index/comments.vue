@@ -1,13 +1,11 @@
 <template>
-    <div style="letter-spacing: 1px">
+    <div style="letter-spacing: 1px; display: flex; flex-direction: column; height: 100%">
         <div class="head">
             <!-- 评论框 -->
             <input
                 type="text"
                 placeholder="请输入评论 . . ."
                 ref="input"
-                @focus="obtain"
-                @blur="lose"
                 v-model="firstComments"
                 @keyup.enter="submit"
             />
@@ -28,7 +26,9 @@
                         {{ item.content }}
                     </p>
                     <div class="first-right">
-                        <span class="delete" @click="commentDelete(item)">删除</span>
+                        <span v-if="role === 'admin'" class="delete" @click="commentDelete(item)"
+                            >删除</span
+                        >
                         <span class="comments" @click="commentInput(item)">评论</span>
                     </div>
                     <!-- 回复一级评论 -->
@@ -37,11 +37,10 @@
                             type="text"
                             placeholder="请输入评论 . . ."
                             v-model="childComments"
-                            @keyup.enter="replySubmit(item, '父级', index)"
-                            @blur="lose(item)"
+                            @keyup.enter="replySubmit(item, '父级', index, 0)"
                         />
                         <!-- 0为回复一级评论 -->
-                        <button @click="replySubmit(item, '父级', index)">发表评论</button>
+                        <button @click="replySubmit(item, '父级', index, 0)">发表评论</button>
                     </div>
                     <!-- 次级评论 -->
                     <div class="second">
@@ -64,7 +63,10 @@
                                             {{ sons.content }}
                                         </p>
                                         <div class="second-right">
-                                            <span class="delete" @click="commentDelete(sons)"
+                                            <span
+                                                v-if="role === 'admin'"
+                                                class="delete"
+                                                @click="commentDelete(sons)"
                                                 >删除</span
                                             >
                                             <span class="comments" @click="commentInput(sons)"
@@ -80,7 +82,6 @@
                                         placeholder="请输入评论 . . ."
                                         v-model="childComments"
                                         @keyup.enter="replySubmit(sons, '子级', index, sons_index)"
-                                        @blur="lose(sons)"
                                     />
                                     <!-- 1为回复次级评论 -->
                                     <button @click="replySubmit(sons, '子级', index, sons_index)">
@@ -98,7 +99,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue'
 import Api from '@/api/comments'
 import { ElEmpty } from 'element-plus'
@@ -107,18 +108,16 @@ onMounted(() => {
     getComments()
 })
 function getComments() {
-    Api.getData().then((res: any) => {
+    Api.getData().then((res) => {
         comments.value = res.data || []
     })
-}
-function lose(m) {
-    // m.display = false
 }
 const current = ref(new Date()) //时间
 const firstComments = ref('')
 const comments = ref([])
 const childComments = ref('')
 const show = ref(false) //暂无条件显示
+const role = sessionStorage.getItem('role')
 
 function submit() {
     if (firstComments.value == '') return
@@ -219,7 +218,11 @@ function replySubmit(m, n, w, t) {
 .head button:hover {
     font-weight: 600;
 }
-
+.content {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 /* 评论内容区域 */
 .content .first {
     display: flex;
@@ -267,15 +270,6 @@ function replySubmit(m, n, w, t) {
 /* 删除评论 */
 .delete:hover {
     color: red;
-}
-/* 点赞字体图标 */
-.praise::before {
-    /* 想使用的icon的十六制编码，去掉&#x之后的 */
-    content: '\ec7f';
-    /* 必须加 */
-    font-family: 'iconfont';
-    margin-right: 4px;
-    font-size: 19px;
 }
 .second {
     background-color: #f3f3f3;
@@ -335,3 +329,6 @@ function replySubmit(m, n, w, t) {
     color: red;
 }
 </style>
+: { display: boolean; }: { id: any; }: { id: any; parentId: any; username: any; display: boolean; }:
+string: string | number: number: { display: boolean; }: { id: any; }: { id: any; parentId: any;
+username: any; display: boolean; }: string: string | number: number
