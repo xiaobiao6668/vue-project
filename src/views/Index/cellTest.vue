@@ -14,29 +14,37 @@
                     <div class="el-text">点击上传原图</div>
                 </template>
             </el-upload>
-            <el-image v-show="showPreImg" :src="preImg" />
+            <div style="height: calc(100% - 56px); max-width: '100%'">
+                <el-image v-show="showPreImg" :src="preImg" fit="contain" />
+            </div>
         </div>
         <div class="right">
             <div class="el-text-right">处理后的图</div>
-            <el-image v-show="showImg" :src="imgData" />
+            <div style="height: calc(100% - 56px); max-width: '100%'" v-loading="loading">
+                <el-image v-show="showImg" :src="imgData" fit="contain" />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import Api from '@/api/image'
 const showImg = ref(false)
 const showPreImg = ref(false)
 const preImg = ref('')
 const imgData = ref('')
 const userId = sessionStorage.getItem('id')
-function handleSuccess(res) {
-    // showPreImg.value = true
+const loading = ref(false)
+async function handleSuccess(res) {
+    loading.value = false
     showImg.value = true
-    // preImg.value = 'data:image/png;base64,' + res.data[0].content
-    imgData.value = 'data:image/png;base64,' + res.data[1].content
+    const imgId = res.data
+    const blob = await Api.getImgPath(imgId)
+    imgData.value = window.URL.createObjectURL(blob)
 }
 function beforeUpload(file) {
+    loading.value = true
     const reader = new FileReader()
     reader.onload = (e) => {
         // 获取文件的二进制流
@@ -48,7 +56,6 @@ function beforeUpload(file) {
         preImg.value = `data:${file.type};base64,${base64Data}`
     }
     reader.readAsBinaryString(file) // 以二进制字符串形式读取文件
-    return false
 }
 onMounted(() => {})
 </script>
@@ -101,14 +108,15 @@ onMounted(() => {})
     height: 100% !important;
     border: none;
 }
-:deep(.upload-demo) {
-    // height: 100%;
-}
 :deep(.el-upload .el-upload--text .is-drag) {
     height: 100%;
 }
 :deep(.el-upload-list) {
     display: none;
+}
+:deep(.el-image) {
+    width: 100%;
+    height: 100%;
 }
 </style>
 : { code: number; data: { savePath: any; saveName: any; url: any; }; }: { name: any; }: any: any:

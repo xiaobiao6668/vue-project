@@ -41,12 +41,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import router from '@/router'
+import Api from '@/api/user'
 
 const tabs = ref(['细胞分割', '细胞检测', '反馈', '历史记录', '个人中心', '用户信息'])
 const paths = ref(['cellSplit', 'cellTest', 'comments', 'history', 'profile', 'users'])
 const activeTab = ref('')
 function logout() {
-    router.push('/login')
+    Api.logout().then(() => {
+        sessionStorage.clear()
+        router.push('/login')
+    })
 }
 function handleClick(pane, index) {
     activeTab.value = pane

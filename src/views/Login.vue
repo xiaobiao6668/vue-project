@@ -114,9 +114,12 @@ function checkInput(userInfo: { account: string; email: string; pwd: string }) {
     return true
 }
 onMounted(() => {
-    userInfoStorage.value = localStorage.getItem('userInfo')&&JSON.parse(localStorage.getItem('userInfo'))
-        ? JSON.parse(localStorage.getItem('userInfo'))
-        : null
+    if (typeof localStorage.getItem('userInfo') === 'string') {
+        userInfoStorage.value = JSON.parse(String(localStorage.getItem('userInfo')))
+    } else {
+        userInfoStorage.value = { account: '', email: '', pwd: '' }
+    }
+    userInfo.value = userInfoStorage.value
 })
 </script>
 

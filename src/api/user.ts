@@ -12,5 +12,8 @@ export default {
     },
     changeUserInfo(params: {} | undefined) {
         return API.PUT_JSON(`/user`, params)
+    },
+    logout(){
+        return API.POST(`/user/logout`)
     }
 }
